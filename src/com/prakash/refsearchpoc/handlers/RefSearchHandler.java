@@ -30,7 +30,7 @@ import com.prakash.refsearchpoc.util.ValidateSearch;
  */
 
 public class RefSearchHandler extends AbstractHandler {
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
@@ -44,11 +44,11 @@ public class RefSearchHandler extends AbstractHandler {
 				ITextSelection textSelection = (ITextSelection) selection;
 				if (textSelection.getLength() != 0) {
 					searchString = textSelection.getText().trim();
-				} 
+				}
 				ITextEditor editor = (ITextEditor) edtPart;
 				IDocumentProvider dp = editor.getDocumentProvider();
 				IDocument doc = dp.getDocument(editor.getEditorInput());
-				if(searchString.isEmpty()) {
+				if (searchString.isEmpty()) {
 					int currentPosition = textSelection.getOffset();
 					try {
 						searchString = getIdentifierText(doc, currentPosition);
@@ -56,19 +56,19 @@ public class RefSearchHandler extends AbstractHandler {
 						e.printStackTrace();
 					}
 				}
-				
+
 				if (!searchString.isEmpty() && ValidateSearch.getValidTypes(searchString)) {
 					String[] wholecontent = doc.get().replace("\r", "").split("\n");
 					RefSearchUtil searchUtill = new RefSearchUtil();
 					searchUtill.currentEditorSearch(edtPart, wholecontent, searchString);
 				} else {
 					IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-					MessageDialog.openInformation(window.getShell(), "Operation Unavailable", 
+					MessageDialog.openInformation(window.getShell(), "Operation Unavailable",
 							"The operation is unavailable on the current selection. Please select a valid java element name.");
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -91,7 +91,7 @@ public class RefSearchHandler extends AbstractHandler {
 			currentPosition--;
 			length++;
 		}
-		text = document.get(currentPosition+1, length-1).trim();
+		text = document.get(currentPosition + 1, length - 1).trim();
 		return text;
 	}
 }

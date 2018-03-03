@@ -18,8 +18,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,12 +25,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
@@ -51,7 +46,7 @@ public class RefSearchView extends ViewPart {
 	private static String searchStr;
 	Node eltPath = null;
 	public static IEditorPart edtPart = null;
-	public static final String ExtSearchViewId = "com.prakash.refsearchpoc.view.ExtSearchView"; //$NON-NLS-1$
+	public static final String ExtSearchViewId = "com.prakash.refsearchpoc.view.ExtSearchView";
 
 	@Override
 	public void createPartControl(Composite parent) {
