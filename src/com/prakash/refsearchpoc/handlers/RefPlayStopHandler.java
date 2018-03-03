@@ -61,7 +61,6 @@ public class RefPlayStopHandler extends AbstractHandler {
 									}
 								}
 							});
-							
 						}
 						for (int i = 0; i < list.size();) {
 							String searchLine = list.get(i);
