@@ -80,19 +80,18 @@ public class RefSearchHandler extends AbstractHandler {
 	 */
 	private String getIdentifierText(IDocument document, int currentPosition) throws BadLocationException {
 		String text = null;
-		String delimiters = ".+<>=()*?; \\n\\t";
 		int length = 0;
 		int newOffset = currentPosition;
-		while (delimiters.indexOf(document.getChar(newOffset)) == -1) {
-			newOffset--;
+		String str = document.get(newOffset, 1);
+		while (!document.get(newOffset, 1).matches("[.+<>=()*?; \\n\\t]")) {
+			newOffset++;
 			length++;
 		}
-
-		while (delimiters.indexOf(document.getChar(currentPosition)) == -1) {
-			currentPosition++;
+		while (!document.get(currentPosition, 1).matches("[.+<>=()*?; \\n\\t]")) {
+			currentPosition--;
 			length++;
 		}
-		text = document.get(newOffset + 1, length - 1).trim();
+		text = document.get(currentPosition+1, length-1).trim();
 		return text;
 	}
 }

@@ -44,8 +44,6 @@ public class RefBackHandler extends AbstractHandler {
 					currentPosition = textSelection.getEndLine() + 1;
 				}
 			}
-			
-			//currentPosition = 10;
 			boolean isStartFromLast = false;
 
 			for (int i = list.size()-1; i >= 0;) {
@@ -66,7 +64,8 @@ public class RefBackHandler extends AbstractHandler {
 				}
 			}
 		} else {
-			System.out.println("reach here");
+			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+			MessageDialog.openInformation(window.getShell(), "Info", "Please perform the search operation before using this option.");
 		}
 
 		return null;

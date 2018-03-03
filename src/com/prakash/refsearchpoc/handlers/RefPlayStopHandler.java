@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
@@ -12,7 +13,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -20,7 +23,8 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import com.prakash.refsearchpoc.view.RefSearchView;
 
 /**
- * Our Reference Play or Stop handler extends AbstractHandler, an IHandler base class.
+ * Our Reference Play or Stop handler extends AbstractHandler, an IHandler base
+ * class.
  * 
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
@@ -29,9 +33,10 @@ import com.prakash.refsearchpoc.view.RefSearchView;
  */
 
 public class RefPlayStopHandler extends AbstractHandler {
-	
+
 	static boolean flag;
 	int currentPosition = 0;
+	final long sleepingTime = 1000;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -39,18 +44,17 @@ public class RefPlayStopHandler extends AbstractHandler {
 		List<String> list = RefSearchView.list;
 		IEditorPart edtPart = RefSearchView.edtPart;
 		flag = !flag;
-
 		if (!list.isEmpty()) {
 			Thread t = new Thread(new Runnable() {
-
 				@Override
 				public void run() {
 					while (flag) {
 						if (edtPart instanceof ITextEditor) {
-							PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+							PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 								public void run() {
 									try {
-										ISelectionProvider selectionProvider = ((ITextEditor) edtPart).getSelectionProvider();
+										ISelectionProvider selectionProvider = ((ITextEditor) edtPart)
+												.getSelectionProvider();
 										ISelection selection = selectionProvider.getSelection();
 										if (selection instanceof ITextSelection) {
 											ITextSelection textSelection = (ITextSelection) selection;
@@ -77,7 +81,7 @@ public class RefPlayStopHandler extends AbstractHandler {
 										}
 									}
 								});
-								
+
 								break;
 							}
 							if (i == list.size() - 1) {
@@ -88,23 +92,18 @@ public class RefPlayStopHandler extends AbstractHandler {
 							}
 						}
 						try {
-							Thread.sleep(1000);
+							Thread.sleep(sleepingTime);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
-					System.out.println("wwwwwww");
-
 				}
 			});
-
 			t.start();
 			t.setPriority(1);
-
-			
 		} else {
-			System.out.println("reach here");
+			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+			MessageDialog.openInformation(window.getShell(), "Info", "Please perform the search operation before using this option.");
 		}
 
 		return null;
